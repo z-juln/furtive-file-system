@@ -4,7 +4,7 @@ import gulp from 'gulp';
 import gulpZip from 'gulp-zip';
 // @ts-ignore
 import gulpUnZip from 'gulp-unzip';
-import gulpDirCipher, { decodeDirname, encodeDirname } from 'gulp-dir-cipher';
+import gulpDirCipher, { checkPassword, decodeDirname, encodeDirname } from 'gulp-dir-cipher';
 import { Dree, Type as DreeFileType, scanAsync as getDirTree } from 'dree';
 
 export interface SimpleFileTree extends Pick<Dree, 'name' | 'size' | 'path' | 'relativePath'> {
@@ -25,7 +25,9 @@ class FurtiveFileSystem {
   }
 
   setPassword(password: string) {
-    // TODO: valid password
+    if (!checkPassword(password)) {
+      throw new Error('the password is illegal and must consist of an 8-byte string');
+    }
     this.password = password;
   }
 

@@ -1139,10 +1139,10 @@ gulp-cli@^2.2.0:
     v8flags "^3.2.0"
     yargs "^7.1.0"
 
-gulp-dir-cipher@^1.1.0:
-  version "1.1.0"
-  resolved "http://hnpm.hupu.io/gulp-dir-cipher/-/gulp-dir-cipher-1.1.0.tgz#ea338caccffec8b77f48287ecb34d13115d08629"
-  integrity sha512-Pt5OJpFfRrOi+KEP/y1bDkYAFoeZo8O4ck5SpWjzznj8PvlUixnY2WpQ26skmSuc3ik57jIyKZ56uCWTVRL0yg==
+gulp-dir-cipher@^1.2.0:
+  version "1.2.0"
+  resolved "http://hnpm.hupu.io/gulp-dir-cipher/-/gulp-dir-cipher-1.2.0.tgz#068c1955a7aca83e879c890901383776fef504d4"
+  integrity sha512-zp5zbirhLrQiFoTp3wSiFCh9lSEFRq6ahSg6m/cNc7e+AxSMsD/5xsq85BGNZsiS9H+goVEqtn5kpB1TcUaemg==
 
 gulp-unzip@^1.1.0:
   version "1.1.0"
