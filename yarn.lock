@@ -645,10 +645,10 @@ concat-stream@^1.6.0:
     readable-stream "^2.2.2"
     typedarray "^0.0.6"
 
-config-cli-helper@^1.0.2:
-  version "1.0.2"
-  resolved "http://hnpm.hupu.io/config-cli-helper/-/config-cli-helper-1.0.2.tgz#a802588a881f7da16d6927fec97c8a5503641dfa"
-  integrity sha512-fjBTFFT5VvyO5512ikmWI4fe9jrgPsUDX7EgzHZJMcoqkkZQy+57aGfyCkxzC0FS+PKNYcBMY69OM6gDK/KAsw==
+config-cli-helper@^1.0.3:
+  version "1.0.3"
+  resolved "http://hnpm.hupu.io/config-cli-helper/-/config-cli-helper-1.0.3.tgz#6bf2668306f7a14b3dafa79007448554c2fbcefb"
+  integrity sha512-JwCnrwxXEYC45+guvT+/fEJMaf7AKH8ZAtw3wYioEhSkdHXeHDlEXhFnAMilJbPxbIEDYmPpRcc/aJAP85Rpcg==
   dependencies:
     cac "^6.7.14"
     configstore "5"

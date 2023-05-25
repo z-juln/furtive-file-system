@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "cac": "^6.7.14",
-    "config-cli-helper": "^1.0.2",
+    "config-cli-helper": "^1.0.3",
     "configstore": "5",
     "crypto": "^1.0.1",
     "dree": "^4.5.4",

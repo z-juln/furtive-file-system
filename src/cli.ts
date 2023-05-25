@@ -9,14 +9,16 @@ const { name: pkgName, version } = require('../package.json');
 
 const cliName = 'ffs';
 
-const config = new Configstore(`config-cli__${pkgName}`, {
-  cwd: path.join(os.tmpdir(), pkgName),
+const localStore = new Configstore(`config-cli__${pkgName}`, {
+  config: {
+    cwd: path.join(os.tmpdir(), pkgName),
+  },
 });
 
-const ffs = new FurtiveFileSystem(config.get('cwd'));
+const ffs = new FurtiveFileSystem(localStore.get('cwd'));
 
 if (process.argv[2] === 'config') {
-  const configCli = getConfigCli({ cliName });
+  const configCli = getConfigCli({ cliName, configStore: localStore });
   configCli.parse(process.argv.slice(1));
   process.exit();
 }
