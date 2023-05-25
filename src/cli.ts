@@ -4,7 +4,7 @@ import fs from 'fs-extra';
 import cac from 'cac';
 import Configstore from 'configstore';
 import { getConfigCli, cacHelpWithConfigCli } from 'config-cli-helper';
-import FurtiveFileSystem from '.';
+import FurtiveFileSystem, { SimpleFileTree } from '.';
 const { name: pkgName, version } = require('../package.json');
 
 const cliName = 'ffs';
@@ -30,7 +30,24 @@ cli
   .command('ls [scope]', 'List file tree')
   .action(async (scope) => {
     const tree = await ffs.ls(scope);
-    console.log(tree);
+    if (!tree.length) {
+      console.log('<empty>');
+      return;
+    }
+    function treeToString(node: Pick<SimpleFileTree, 'realName' | 'children'>, indent = ''): string {
+      let result = indent + node.realName + '\n';
+      if (node.children) {
+        const lastChild = node.children[node.children.length - 1];
+        for (const child of node.children) {
+          const isLastChild = child === lastChild;
+          const symbol = isLastChild ? '└──' : '├──';
+          const childIndent = indent + (isLastChild ? '    ' : '│   ');
+          result += indent + symbol + treeToString(child, childIndent).slice(indent.length + 3);
+        }
+      }
+      return result;
+    }
+    console.log(treeToString({ realName: '', children: tree }));
   });
 
 cli
