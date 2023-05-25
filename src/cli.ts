@@ -17,7 +17,7 @@ const localStore = new Configstore(`config-cli__${pkgName}`, {
   },
 });
 
-const ffs = new FurtiveFileSystem(localStore.get('cwd') ?? defaultCwd);
+const ffs = new FurtiveFileSystem(localStore.get('config').cwd);
 
 if (process.argv[2] === 'config') {
   const configCli = getConfigCli({ cliName, configStore: localStore });
@@ -31,6 +31,7 @@ const cli = cac(cliName);
 cli
   .command('ls [scope]', 'List file tree')
   .action(async (scope) => {
+    ffs.setPassword('juln1234');
     const tree = await ffs.ls(scope);
     if (!tree.length) {
       console.log('<empty>');
