@@ -146,6 +146,10 @@ class FurtiveFileSystem {
     );
   }
 
+  async clean() {
+    await this.rmScope('');
+  }
+
   async rmProject(name: string, scope?: string) {
     const { cwd } = this;
     if (!(await this.ls(scope)).find(p => p.realName === name)) {

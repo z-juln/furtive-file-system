@@ -1,49 +1,80 @@
-import { cac } from 'cac';
+import path from 'path';
+import os from 'os';
+import fs from 'fs-extra';
+import cac from 'cac';
+import Configstore from 'configstore';
+import { getConfigCli, cacHelpWithConfigCli } from 'config-cli-helper';
+import FurtiveFileSystem from '.';
+const { name: pkgName, version } = require('../package.json');
 
-const cli = cac();
+const cliName = 'ffs';
 
-const argv = cli
-  .option('input', {
-    alias: 'i',
-    describe: 'The input directory to compress and encrypt',
-    demandOption: true,
-    type: 'string',
-  })
-  .option('output', {
-    alias: 'o',
-    describe: 'The output file name',
-    demandOption: true,
-    type: 'string',
-  })
-  .option('algorithm', {
-    alias: 'a',
-    describe: 'The compression algorithm to use',
-    choices: ['zip', 'tar', 'tar.gz', 'tar.bz2'],
-    default: 'zip',
-    type: 'string',
-  })
-  .option('password', {
-    alias: 'p',
-    describe: 'The password to encrypt the output file',
-    type: 'string',
-  })
-  .option('git', {
-    alias: 'g',
-    describe: 'The URL of the Git repository to upload to',
-    type: 'string',
-  })
-  .option('branch', {
-    alias: 'b',
-    describe: 'The Git branch to upload to',
-    default: 'master',
-    type: 'string',
-  })
-  .help()
-  .argv;
+const config = new Configstore(`config-cli__${pkgName}`, {
+  cwd: path.join(os.tmpdir(), pkgName),
+});
 
-const inputDir = path.resolve(argv.input);
-const outputFileName = path.resolve(argv.output);
-const compressionAlgorithm = argv.algorithm;
-const password = argv.password;
-const gitUrl = argv.git;
-const gitBranch = argv.branch;
+const ffs = new FurtiveFileSystem(config.get('cwd'));
+
+if (process.argv[2] === 'config') {
+  const configCli = getConfigCli({ cliName });
+  configCli.parse(process.argv.slice(1));
+  process.exit();
+}
+
+// TODO cli
+const cli = cac(cliName);
+
+cli
+  .command('ls [scope]', 'List file tree')
+  .action(async (scope) => {
+    const tree = await ffs.ls(scope);
+    console.log(tree);
+  });
+
+cli
+  .command('push', 'Push project')
+  .option('--target <dir>', 'Set target directory')
+  .option('--scope <scope>', 'Set project scope')
+  .option('--rename <name>', 'Set project rename')
+  .option('--ignore <globs>', 'Set ignore globs')
+  .action(async ({ target, scope, rename, ignore }) => {
+    await ffs.pushProject(target, { scope, rename, ignore });
+    console.log('Push project successfully');
+  });
+
+cli
+  .command('restore <scope>', 'Restore project')
+  .option('--target <dir>', 'Set target directory')
+  .option('--rename <name>', 'Set project rename')
+  .action(async (scope, { target, rename }) => {
+    await ffs.restoreProject(scope, target, { rename });
+    console.log('Restore project successfully');
+  });
+
+cli
+  .command('rm <scope>', 'Remove project or scope')
+  .option('--project', 'Set remove project')
+  .option('--scope', 'Set remove scope')
+  .action(async (scope, { project, scope: rmScope }) => {
+    if (project) {
+      await ffs.rmProject(scope, rmScope);
+      console.log(`Remove project ${scope} successfully`);
+    } else if (rmScope) {
+      await ffs.rmScope(scope);
+      console.log(`Remove scope ${scope} successfully`);
+    }
+  });
+
+cli
+  .command('clean', 'Clean FurtiveFileSystem')
+  .action(async () => {
+    await ffs.clean();
+    console.log('Clean FurtiveFileSystem successfully');
+  });
+
+cli.help(
+  cacHelpWithConfigCli(cliName)
+);
+cli.version(version);
+
+cli.parse();

@@ -4,9 +4,11 @@ Create a file system called `furtive file system`, where the directory name, fil
 
 ## install
 
-`npm i furtive-file-system`
+use api: `npm i furtive-file-system` or `yarn add furtive-file-system`
 
-## use
+use cli: `npm i furtive-file-system -g` or `yarn global add furtive-file-system`
+
+## use api
 
 ```typescript
 import FurtiveFileSystem from 'furtive-file-system';
@@ -60,7 +62,29 @@ ffs.rmScope('scope1/scope2')
   .catch((error) => console.log('error', error?.message ?? error));
 
 // clean furtive-file-system
-ffs.rmScope('')
+ffs.clean()
   .then(() => console.log('=== clean furtive-file-system ok'))
   .catch((error) => console.log('error', error?.message ?? error));
 ```
+
+## use cli
+
+help: `ffs -h`
+
+version: `ffs -v`
+
+set cwd: `ffs config set cwd=xxx`
+
+get cwd: `ffs config get cwd`
+
+ls all tree: `ffs ls`
+
+ls scope: `ffs ls scope1/scope2`
+
+push project (by inquirer): `ffs push`
+
+rm project: `ffs rm scope1/scope2/project1 --project`
+
+rm scope: `ffs rm scope1/scope2 --scope`
+
+clean all `ffs clean`
