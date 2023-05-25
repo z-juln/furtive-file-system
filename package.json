@@ -1,7 +1,7 @@
 {
-  "name": "furtive-git",
+  "name": "furtive-file-system",
   "version": "1.0.0",
-  "description": "furtive-git",
+  "description": "furtive-file-system",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "files": [
@@ -15,9 +15,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/z-juln/furtive-git.git"
+    "url": "git+https://github.com/z-juln/furtive-file-system.git"
   },
-  "homepage": "https://github.com/z-juln/furtive-git/README.md",
+  "homepage": "https://github.com/z-juln/furtive-file-system/README.md",
   "keywords": [],
   "author": "juln",
   "license": "ISC",

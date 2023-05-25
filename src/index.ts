@@ -20,11 +20,12 @@ class FurtiveFileSystem {
   constructor(cwd: string, opts?: { password?: string; }) {
     this.cwd = path.resolve(cwd);
     if (opts?.password) {
-      this.password = opts?.password;
+      this.setPassword(opts.password);
     }
   }
 
   setPassword(password: string) {
+    // TODO: valid password
     this.password = password;
   }
 
@@ -48,6 +49,7 @@ class FurtiveFileSystem {
   }
 
   pushProject(dir: string, opts?: {
+    /** it can be one layer or multiple layers of scope */
     scope?: string;
     rename?: string;
     /** glob pattern */
@@ -73,7 +75,7 @@ class FurtiveFileSystem {
     return new Promise<void>((resolve, reject) => {
       gulp.src(
         path.join(dir, '**/**'),
-        { ignore: ignore.map(p => path.resolve(p)) },
+        { ignore },
       )
         .pipe(
           gulpZip(encodedScope ? path.join(encodedScope, projectName) : projectName)
@@ -153,28 +155,5 @@ class FurtiveFileSystem {
     );
   }
 }
-
-const ffs = new FurtiveFileSystem('./test', { password: 'juln1234' });
-// ffs.pushProject('./src', { scope: 'dir1/dir2', rename: 'project1' })
-//   .then(() => {
-//     console.log('=== pushProject okk');
-//     ffs.restoreProject('dir1/dir2/project1', './restore', { rename: 'src' })
-//       .then(() => console.log('=== restoreProject okk'));
-//   })
-//   .catch(() => console.log('error'));
-
-// ffs.ls('dir1/dir2')
-//   .then(tree => {
-//     console.log('tree', JSON.stringify(tree, null, 2));
-//     ffs.rmProject('project1', 'dir1/dir2')
-//       .then(() => console.log('=== rmProject <dir1/dir2/project1> ok'));
-//   });
-
-// ffs.ls()
-//   .then(tree => {
-//     console.log('tree', JSON.stringify(tree, null, 2));
-//     ffs.rmScope('dir1/dir2')
-//       .then(() => console.log('=== rmScope <dir1/dir2> ok'));
-//   });
 
 export default FurtiveFileSystem;
