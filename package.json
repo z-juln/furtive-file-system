@@ -42,6 +42,7 @@
     "gulp": "^4.0.2",
     "gulp-dir-cipher": "^1.2.0",
     "gulp-unzip": "^1.1.0",
-    "gulp-zip": "^5.1.0"
+    "gulp-zip": "^5.1.0",
+    "tty-table": "^4.2.1"
   }
 }

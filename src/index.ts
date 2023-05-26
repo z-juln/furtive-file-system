@@ -36,9 +36,9 @@ class FurtiveFileSystem {
     const encodedScope = scope ? scope.split('/').map(encodeDirname).join('/') : null;
     const tree = await getDirTree(encodedScope ? path.join(cwd, encodedScope) : cwd) as Dree | null;
     if (!tree) return [];
-    const getSimpleFileTree = (dree: Dree, isRoot = false): SimpleFileTree => {
+    const getSimpleFileTree = (dree: Dree): SimpleFileTree => {
       return {
-        realName: isRoot ? dree.name : decodeDirname(dree.name),
+        realName: decodeDirname(dree.name),
         name: dree.name,
         path: dree.path,
         relativePath: dree.relativePath,
@@ -47,7 +47,7 @@ class FurtiveFileSystem {
         children: dree.children?.map(file => getSimpleFileTree(file)),
       };
     };
-    return getSimpleFileTree(tree, true).children ?? [];
+    return getSimpleFileTree(tree).children ?? [];
   }
 
   pushProject(dir: string, opts?: {

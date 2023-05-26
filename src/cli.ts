@@ -4,6 +4,7 @@ import fs from 'fs-extra';
 import cac from 'cac';
 import Configstore from 'configstore';
 import { getConfigCli, cacHelpWithConfigCli } from 'config-cli-helper';
+import TtyTable from 'tty-table';
 import FurtiveFileSystem, { SimpleFileTree } from '.';
 const { name: pkgName, version } = require('../package.json');
 
@@ -30,11 +31,27 @@ const cli = cac(cliName);
 
 cli
   .command('ls [scope]', 'List file tree')
-  .action(async (scope) => {
+  .option('-l, --list', 'List detailed information for the next layer of `scope`')
+  .action(async (scope, { list }) => {
     ffs.setPassword('juln1234');
     const tree = await ffs.ls(scope);
     if (!tree.length) {
       console.log('<empty>');
+      return;
+    }
+    if (list) {
+      console.log(
+        TtyTable(
+          // @ts-ignore
+          [{ value: 'realName' }, { value: 'size' }, { value: 'filename' }, { value: 'type' }],
+          tree.map(({ realName, size, name, type }) => ({ realName, size, filename: name, type })),
+          [],
+          // @ts-ignore
+          { headerAlign: 'center', align: "left", borderStyle: 'none' },
+        ).render()
+        // 去掉第一行的\n
+        .replace('\n', '')
+      );
       return;
     }
     function treeToString(node: Pick<SimpleFileTree, 'realName' | 'children'>, indent = '', result = ''): string {
