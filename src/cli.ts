@@ -37,15 +37,16 @@ cli
       console.log('<empty>');
       return;
     }
-    function treeToString(node: Pick<SimpleFileTree, 'realName' | 'children'>, indent = ''): string {
-      let result = indent + node.realName + '\n';
-      if (node.children) {
+    function treeToString(node: Pick<SimpleFileTree, 'realName' | 'children'>, indent = '', result = ''): string {
+      result += `${indent}${node.realName}\n`;
+        if (node.children) {
         const lastChild = node.children[node.children.length - 1];
-        for (const child of node.children) {
+          for (let i = 0; i < node.children.length; i++) {
+          const child = node.children[i];
           const isLastChild = child === lastChild;
           const symbol = isLastChild ? '└──' : '├──';
           const childIndent = indent + (isLastChild ? '    ' : '│   ');
-          result += indent + symbol + treeToString(child, childIndent).slice(indent.length + 3);
+          result += `${indent}${symbol}${treeToString(child, childIndent).slice(indent.length + 3)}`;
         }
       }
       return result;
