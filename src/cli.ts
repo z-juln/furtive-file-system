@@ -137,7 +137,9 @@ cli
           type: 'input',
           name: 'ignore',
           message: 'Set ignore globs, separated by commas',
-          default: 'node_modules/**/**',
+          default(answers: { target: string }) {
+            return path.join(path.resolve(answers.target), 'node_modules/**/**');
+          },
         },
       ]);
     const target = path.resolve(answers.target);
