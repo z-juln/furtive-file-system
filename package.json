@@ -5,10 +5,11 @@
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "bin": {
-    "ffs": "./dist/cli.js"
+    "ffs": "./lib/cli.js"
   },
   "files": [
     "dist/*",
+    "lib/*",
     "src/*"
   ],
   "scripts": {
