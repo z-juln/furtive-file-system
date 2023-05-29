@@ -37,8 +37,15 @@ class FurtiveFileSystem {
     const tree = await getDirTree(encodedScope ? path.join(cwd, encodedScope) : cwd) as Dree | null;
     if (!tree) return [];
     const getSimpleFileTree = (dree: Dree, isRoot = false): SimpleFileTree => {
+      const tryDecodeDirname = (name: string) => {
+        try {
+          return decodeDirname(dree.name);
+        } catch {
+          return null;
+        }
+      }
       return {
-        realName: isRoot ? dree.name : decodeDirname(dree.name),
+        realName: isRoot ? dree.name : (tryDecodeDirname(dree.name) ?? '<no access>'),
         name: dree.name,
         path: dree.path,
         relativePath: dree.relativePath,
