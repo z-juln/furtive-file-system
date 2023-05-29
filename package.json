@@ -1,6 +1,6 @@
 {
   "name": "furtive-file-system",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "furtive-file-system",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
