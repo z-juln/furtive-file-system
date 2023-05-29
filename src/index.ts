@@ -36,9 +36,9 @@ class FurtiveFileSystem {
     const encodedScope = scope ? scope.split('/').map(encodeDirname).join('/') : null;
     const tree = await getDirTree(encodedScope ? path.join(cwd, encodedScope) : cwd) as Dree | null;
     if (!tree) return [];
-    const getSimpleFileTree = (dree: Dree): SimpleFileTree => {
+    const getSimpleFileTree = (dree: Dree, isRoot = false): SimpleFileTree => {
       return {
-        realName: decodeDirname(dree.name),
+        realName: isRoot ? dree.name : decodeDirname(dree.name),
         name: dree.name,
         path: dree.path,
         relativePath: dree.relativePath,
@@ -47,7 +47,7 @@ class FurtiveFileSystem {
         children: dree.children?.map(file => getSimpleFileTree(file)),
       };
     };
-    return getSimpleFileTree(tree).children ?? [];
+    return getSimpleFileTree(tree, true).children ?? [];
   }
 
   pushProject(dir: string, opts?: {
@@ -136,9 +136,6 @@ class FurtiveFileSystem {
 
   async rmScope(scope: string) {
     const { cwd } = this;
-    if ((await this.ls(scope)).length === 0) {
-      throw new Error('the scope <scope> cannot be found');
-    }
     const encodedScope = scope.split('/').map(encodeDirname).join('/');
     await fs.rm(
       path.join(cwd, encodedScope),
@@ -152,7 +149,7 @@ class FurtiveFileSystem {
 
   async rmProject(name: string, scope?: string) {
     const { cwd } = this;
-    if (!(await this.ls(scope)).find(p => p.realName === name)) {
+    if (!(await this.ls(scope)).find(p => p.type === 'project' && p.realName === name)) {
       throw new Error(`the project <${path.join(scope ?? '', name)}> cannot be found`);
     }
     const encodedScope = scope ? scope.split('/').map(encodeDirname).join('/') : null;

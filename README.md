@@ -79,6 +79,8 @@ get cwd: `ffs config get cwd`
 
 ls all tree: `ffs ls`
 
+ls scope: `ffs ls -l`
+
 ls scope: `ffs ls scope1/scope2`
 
 push project (by inquirer): `ffs push`
