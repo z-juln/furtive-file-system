@@ -80,11 +80,12 @@ class FurtiveFileSystem {
       ? typeof opts.ignore === 'string'
         ? [dir, opts.ignore] : [dir, ...opts.ignore]
         : [];
+    console.log(dir, opts, ignore);
 
     return new Promise<void>((resolve, reject) => {
       gulp.src(
         path.join(dir, '**/**'),
-        { ignore },
+        { ignore, cwd: dir },
       )
         .pipe(
           gulpZip(encodedScope ? path.join(encodedScope, projectName) : projectName)
