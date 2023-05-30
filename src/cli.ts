@@ -137,7 +137,7 @@ cli
           type: 'input',
           name: 'ignore',
           message: 'Set ignore globs, separated by commas',
-          default: '**/node_modules/**,**/node_modules,**/.DS_Store,**/.gitkeep',
+          default: '**/node_modules/**,**/.DS_Store',
         },
       ]);
     const target = path.resolve(answers.target);
