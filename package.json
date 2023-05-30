@@ -46,6 +46,7 @@
     "gulp-unzip": "^1.1.0",
     "gulp-zip": "^5.1.0",
     "inquirer": "8",
+    "ora": "5",
     "tty-table": "^4.2.1"
   }
 }

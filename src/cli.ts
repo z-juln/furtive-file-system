@@ -7,6 +7,7 @@ import Configstore from 'configstore';
 import { getConfigCli, cacHelpWithConfigCli } from 'config-cli-helper';
 import TtyTable from 'tty-table';
 import { checkPassword } from 'gulp-dir-cipher';
+import ora from 'ora';
 import FurtiveFileSystem, { SimpleFileTree } from '.';
 const { name: pkgName, version } = require('../package.json');
 
@@ -141,7 +142,9 @@ cli
         },
       ]);
     const target = path.resolve(answers.target);
+    const spinner = ora('Push project...').start();
     await ffs.pushProject(target, { scope: answers.scope, rename: answers.name, ignore: answers.ignore?.split(',') });
+    spinner.succeed();
     console.log('Push project successfully');
   });
 
@@ -161,13 +164,14 @@ cli
   .option('-s, --scope', 'Set remove scope')
   .action(async (name, { project, scope: rmScope }) => {
     await inquirePassword();
+    const spinner = ora(`Remove ${project ? 'project' : 'scope'}...`).start();
     if (project) {
       await ffs.rmProject(name, rmScope);
-      console.log(`Remove project ${name} successfully`);
     } else if (rmScope) {
       await ffs.rmScope(name);
-      console.log(`Remove scope ${name} successfully`);
     }
+    spinner.succeed();
+    console.log(`Remove ${project ? 'project' : 'scope'} ${name} successfully`);
   });
 
 cli
